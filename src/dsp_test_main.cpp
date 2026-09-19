@@ -46,12 +46,11 @@ void writeWav(const std::string& filename, const std::vector<float>& samples, in
     std::cout << "Wrote " << filename << " (" << samples.size() << " samples)\n";
 }
 
-static float runTestForMode(syrebas::EmulationMode mode, const std::string& wavFilename) {
+static float runTest(const std::string& wavFilename) {
     syrebas::SynthEngine engine;
     engine.setSampleRate(44100.0);
 
     auto& params = engine.getParams();
-    params.mode = mode;
     params.cutoff = 0.4f;
     params.resonance = 0.85f;
     params.envMod = 0.8f;
@@ -134,12 +133,8 @@ static float runTestForMode(syrebas::EmulationMode mode, const std::string& wavF
 }
 
 int main() {
-    float accurateMax = runTestForMode(syrebas::EmulationMode::Accurate, "test_syrebas_accurate.wav");
-    std::cout << "Accurate mode DSP test completed. Max peak amplitude: " << accurateMax << "\n";
-
-    float faithfulMax = runTestForMode(syrebas::EmulationMode::Faithful, "test_syrebas_faithful.wav");
-    std::cout << "Faithful mode DSP test completed. Max peak amplitude: " << faithfulMax << "\n";
-
+    float maxAmp = runTest("test_syrebas.wav");
+    std::cout << "DSP test completed. Max peak amplitude: " << maxAmp << "\n";
     std::cout << "All DSP tests completed successfully.\n";
     return 0;
 }

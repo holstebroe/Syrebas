@@ -25,8 +25,7 @@ enum ParamId : clap_id {
     PARAM_ACCENT = 4,
     PARAM_WAVEFORM = 5,
     PARAM_VOLUME = 6,
-    PARAM_MODE = 7,
-    PARAM_COUNT = 8
+    PARAM_COUNT = 7
 };
 
 enum MidiParamId : clap_id {
@@ -37,8 +36,7 @@ enum MidiParamId : clap_id {
     MIDI_PARAM_ACCENT = 22,
     MIDI_PARAM_WAVEFORM = 23,
     MIDI_PARAM_VOLUME = 20,
-    MIDI_PARAM_MODE = 24,
-    MIDI_PARAM_COUNT = 8
+    MIDI_PARAM_COUNT = 7
 };
 
 class SyrebasClap {

@@ -111,22 +111,6 @@ void GuiWindow::drawSyrebasTitle(Graphics& g, int x, int y, uint32_t color) {
     g.drawRect(s2X, y + 34, 14, 4, color);
 }
 
-bool GuiWindow::isInLogoPanel(int x, int y) const {
-    const int dividerX = 530;
-    return x >= dividerX && x < static_cast<int>(width_) &&
-           y >= 14 && y <= static_cast<int>(height_) - 14;
-}
-
-void GuiWindow::toggleEmulationMode() {
-    if (!plugin_) return;
-    double current = 0.0;
-    plugin_->paramsValue(PARAM_MODE, &current);
-    double newVal = (current >= 0.5) ? 0.0 : 1.0;
-    plugin_->onBeginEditFromGui(PARAM_MODE);
-    plugin_->onParamValueFromGui(PARAM_MODE, newVal);
-    plugin_->onEndEditFromGui(PARAM_MODE);
-}
-
 void GuiWindow::renderFrame() {
     updateKnobValuesFromPlugin();
 
@@ -163,11 +147,8 @@ void GuiWindow::renderFrame() {
         }
     }
 
-    // 3. Draw Title Logo "Syrebas" - dark green in Faithful mode, black in Accurate.
-    // Doubles as a click target (see handleMouseDown) that toggles the engine mode.
-    double modeVal = 0.0;
-    if (plugin_) plugin_->paramsValue(PARAM_MODE, &modeVal);
-    uint32_t logoColor = (modeVal >= 0.5) ? 0xFF006400 : 0xFF121212;
+    // 3. Draw Title Logo "Syrebas"
+    uint32_t logoColor = 0xFF121212;
     drawSyrebasTitle(g, 545, 65, logoColor);
 
     // 4. Downsample hiResBuffer_ (2x2 box filter) into pixelBuffer_
@@ -198,12 +179,6 @@ void GuiWindow::renderFrame() {
 
 void GuiWindow::handleMouseDown(int x, int y, bool isShift) {
     lastShiftState_ = isShift;
-
-    if (isInLogoPanel(x, y)) {
-        toggleEmulationMode();
-        renderFrame();
-        return;
-    }
 
     for (size_t i = 0; i < controls_.size(); ++i) {
         auto& ctrl = controls_[i];

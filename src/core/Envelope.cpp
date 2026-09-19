@@ -26,16 +26,7 @@ void Envelope::updateCoefficients() {
     vcfAttackCoeff_ = 1.0f - std::exp(-1.0f / static_cast<float>(sampleRate_ * 0.0035));
 
     // VCF Decay: exponential decay time constant for vcfDecayTimeSec_ (tau = t_60 / 6.9078).
-    // In faithful mode, an active accent overrides this unconditionally (Section 25: "the
-    // MEG decay control is bypassed/switched... independent of the front-panel Decay
-    // setting... should not merely multiply the decay coefficient"), and must be re-derived
-    // from the fixed accent decay time - not from vcfDecayTimeSec_ - every time this runs,
-    // since setDecay() calls this once per audio block for the lifetime of the note.
-    if (faithfulAccentDecay_ && isAccent_) {
-        vcfDecayCoeff_ = std::exp(-1.0f / static_cast<float>(sampleRate_ * (kAccentDecayTimeSec / 6.907755f)));
-    } else {
-        vcfDecayCoeff_ = std::exp(-1.0f / static_cast<float>(sampleRate_ * (vcfDecayTimeSec_ / 6.907755f)));
-    }
+    vcfDecayCoeff_ = std::exp(-1.0f / static_cast<float>(sampleRate_ * (vcfDecayTimeSec_ / 6.907755f)));
 
     // VCA Attack: 3.0ms RC curve (Section 21)
     vcaAttackCoeff_ = 1.0f - std::exp(-1.0f / static_cast<float>(sampleRate_ * 0.003));
@@ -59,12 +50,9 @@ void Envelope::noteOn(bool isAccent, bool isSlide, float accentKnob) {
 
     updateCoefficients();
 
-    // Legacy (Accurate mode) accent decay behavior: scale toward minDecay by accentKnob.
-    // When accentKnob == 0.0, VCF decay stays at the normal Decay-knob setting. Left as-is
-    // (including being re-derived from vcfDecayTimeSec_ on every subsequent audio block,
-    // which effectively drops the override after the first block) so Accurate mode's sound
-    // is unchanged; faithfulAccentDecay_ handles the corrected behavior in updateCoefficients().
-    if (!faithfulAccentDecay_ && isAccent_) {
+    // Accent decay behavior: scale toward minDecay by accentKnob.
+    // When accentKnob == 0.0, VCF decay stays at the normal Decay-knob setting.
+    if (isAccent_) {
         float actualDecayTimeSec = vcfDecayTimeSec_ + (kAccentDecayTimeSec - vcfDecayTimeSec_) * std::min(std::max(accentKnob, 0.0f), 1.0f);
         vcfDecayCoeff_ = std::exp(-1.0f / static_cast<float>(sampleRate_ * (actualDecayTimeSec / 6.907755f)));
     }
