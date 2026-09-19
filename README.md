@@ -6,20 +6,10 @@
 
 ## Features
 
-- **Dual DSP Emulation Modes**, both built on the same coupled (inter-stage-loaded)
-  diode-ladder VCF, BA662-style VCA and CV-domain knob mapping — they differ only
-  in numerical accuracy vs. CPU cost:
-  - **Accurate Mode**: 4x oversampled ladder solver (2nd-order Runge-Kutta). The
-    original, CPU-light emulation mode.
-  - **Faithful Mode**: 8x oversampled ladder solver (4th-order Runge-Kutta) with
-    per-stage capacitor pole spreading ($C_1 = 10\text{nF}$, $C_2 = 15\text{nF}$,
-    $C_3 = 33\text{nF}$, $C_4 = 10\text{nF}$) and the extra input/output coupling
-    poles the real VCF's surrounding network adds. Costs more CPU for a closer
-    match to the hardware; use this when accuracy matters more than headroom.
-
-  Both modes share:
-  - Coupled diode ladder $\tanh()$ inter-stage nonlinearity and feedback saturation,
-    with a resonance-dependent bass-drop high-pass network in the feedback path.
+- **Coupled Diode-Ladder DSP Engine**:
+  - 4x oversampled 2nd-order Runge-Kutta (RK2) diode-ladder filter solver with
+    inter-stage $\tanh()$ nonlinearity and feedback saturation.
+  - Resonance-dependent bass-drop high-pass network in the feedback path.
   - BA662 VCA model with control-current summing and asymmetric overdrive saturation.
   - Authentic control-voltage (CV) cross-talk, resonance CV bleed, and accent capacitor
     energy accumulation across consecutive notes.
@@ -31,7 +21,7 @@
   - Embedded GUI using pure native drawing primitives without heavy frameworks (e.g. JUCE).
   - Smooth 303-style knob rendering with vertical drag and fine-tuning precision modifiers.
 - **CLAP & MIDI Support**:
-  - 8 fully automatable parameters exposed to the host DAW.
+  - 7 fully automatable parameters exposed to the host DAW.
   - Full MIDI Control Change (CC) parameter control and state load/save persistence.
 
 ---
@@ -60,7 +50,6 @@
 | **Decay** | VCF envelope decay duration (200ms to 2.5s). |
 | **Accent** | Accent intensity level for high-velocity notes ($\ge 0.8$). |
 | **Waveform** | Switch between **Saw** and **Square** oscillator waveforms. |
-| **Mode** | Switch between **Accurate** (4x oversampled, RK2) and **Faithful** (8x oversampled, RK4, pole-spread ladder) DSP modes. |
 | **Volume** | Master output level. |
 
 - **Knob Adjustments**: Click and drag **vertically** (up/down) on any knob to adjust its parameter.

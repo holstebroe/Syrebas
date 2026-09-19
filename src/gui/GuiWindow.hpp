@@ -108,8 +108,6 @@ private:
     void initControls();
     void updateKnobValuesFromPlugin();
     void drawSyrebasTitle(Graphics& g, int x, int y, uint32_t color);
-    bool isInLogoPanel(int x, int y) const;
-    void toggleEmulationMode();
 };
 
 } // namespace syrebas

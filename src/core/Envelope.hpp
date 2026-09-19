@@ -11,13 +11,6 @@ public:
     void setSampleRate(double sampleRate);
     void setDecay(float decayParam); // 0.0 to 1.0 -> 200ms to 2.5s
 
-    // "Faithful" mode treats the accent MEG-decay override as the unconditional
-    // hardware switch the reference documents it as (independent of the Accent
-    // knob, and stable across every audio block rather than being re-derived
-    // from the Decay knob each block). "Accurate" mode keeps its existing,
-    // Accent-knob-scaled behavior unchanged.
-    void setFaithfulAccentDecay(bool faithful) { faithfulAccentDecay_ = faithful; }
-
     void noteOn(bool isAccent, bool isSlide, float accentKnob = 1.0f);
     void noteOff();
 
@@ -35,10 +28,9 @@ private:
 
     bool gate_{false};
     bool isAccent_{false};
-    bool faithfulAccentDecay_{false};
 
     // Accent MEG decay override target (~200ms, Section 25), fixed regardless of the
-    // Decay knob and, in faithful mode, regardless of the Accent knob too.
+    // Decay knob.
     static constexpr float kAccentDecayTimeSec = 0.20f;
 
     float vcfDecayTimeSec_{0.20f};

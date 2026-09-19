@@ -7,13 +7,6 @@
 
 namespace syrebas {
 
-enum class EmulationMode {
-    Accurate = 0,  // 4x oversampled coupled diode ladder (RK2)
-    Faithful = 1   // 8x oversampled coupled diode ladder (RK4) with pole spreading
-                   // and coupling poles, tracking the hardware more closely at
-                   // higher CPU cost
-};
-
 struct SynthParameters {
     float cutoff{0.5f};        // Knob range 0.0 to 1.0
     float resonance{0.5f};     // Knob range 0.0 to 1.0
@@ -22,7 +15,6 @@ struct SynthParameters {
     float accent{0.5f};        // Knob range 0.0 to 1.0
     Waveform waveform{Waveform::Saw};
     float masterVolume{0.8f};
-    EmulationMode mode{EmulationMode::Accurate};
 };
 
 class SynthEngine {
